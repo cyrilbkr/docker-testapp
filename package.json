@@ -1,0 +1,13 @@
+{
+  "name": "docker-testapp",
+  "version": "1.0",
+  "description": "Docker node testapp",
+  "author": "cyrilbkr",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
