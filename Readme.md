@@ -1,10 +1,27 @@
 # docker-testapp
 
-Simple versioned app for canary deployment examples
+Simple Node.js app for Canary deployment test
 
 ## Usage with Docker
 
      docker run -ti -p 3000:80 cyrilbkr/testapp
+
+### Tags / Releases
+
+#### 1.0 & 2.0
+
+* cyrilbkr/testapp:1.0
+
+* cyrilbkr/testapp:2.0
+
+1.0 & 2.0 return an http 200 Hello World type message with the current release running. 
+
+#### 3.0
+
+* cyrilbkr/testapp:3.0
+
+3.0 return a 404 Not found to simulate a bug in the app and automatic rollback Canary deployment examples
+
 
 
 ## Usage with Kubernetes
