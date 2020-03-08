@@ -1,0 +1,20 @@
+apiVersion: flagger.app/v1alpha3
+kind: Canary
+metadata:
+  name: api
+  namespace: testapi
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api
+  service:
+    port: 3000
+  canaryAnalysis:
+    interval: 3s
+    threshold: 5
+    stepWeight: 10
+    metrics:
+    - name: request-success-rate
+      threshold: 99
+      interval: 1m

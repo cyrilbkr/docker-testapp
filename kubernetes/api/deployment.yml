@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: testapi
+  annotations:
+    linkerd.io/inject: enabled 
+spec:
+  selector:
+    matchLabels:
+      app: api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: cyrilbkr/testapp:1.0
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always

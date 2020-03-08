@@ -1,0 +1,91 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load
+  namespace: testapi
+spec:
+  selector:
+    matchLabels:
+      app: load
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: load
+    spec:
+      containers:
+      - image: buoyantio/slow_cooker:1.2.0
+        name: slow-cooker
+        env:
+          - name: QPS
+            value: "10"
+          - name: CONCURRENCY
+            value: "1"
+        command: ["/bin/sh", "-c"]
+        args:
+          - |-
+            slow_cooker -qps ${QPS} -concurrency ${CONCURRENCY} http://api:3000
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend
+  namespace: testapi
+data:
+ nginx.conf: |-
+    events {}
+    http {
+        server {
+          listen 8080;
+            location / {
+                proxy_pass http://api:3000;
+            }
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: testapi
+  labels:
+    app: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          volumeMounts:
+            - name: cfg
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: cfg
+          configMap:
+            name: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: testapi
+spec:
+  ports:
+  - name: service
+    port: 8080
+  selector:
+    app: frontend
+---
