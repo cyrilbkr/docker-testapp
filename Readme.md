@@ -20,7 +20,7 @@ Simple Node.js app for Canary deployment test
 
 * cyrilbkr/testapp:3.0
 
-3.0 return a 500 Not found to simulate a bug in the app and automatic rollback Canary deployment examples
+3.0 return a http 5xx code to simulate a bug in the app and automatic rollback Canary deployment examples
 
 
 
