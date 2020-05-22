@@ -29,8 +29,8 @@ Simple Node.js app for Canary deployment test
 ### Quick simple setup
 
 ````
-$ kubectl apply -f
-$ kubectl apply -f
+$ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/simple/service.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/simple/deployment.yaml
 
 ````
 
@@ -76,8 +76,9 @@ spec:
 ### Production like setup (w/ hpa/limits/rollingupdate)
 
 ````
-$ kubectl apply -f 
-$ kubectl apply -f
+$ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/prod/service.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/prod/deployment.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/prod/hpa.yaml
 
 ````
 
