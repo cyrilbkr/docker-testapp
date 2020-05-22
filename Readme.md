@@ -31,7 +31,6 @@ Simple Node.js app for Canary deployment test
 ````
 $ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/simple/service.yaml
 $ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/simple/deployment.yaml
-
 ````
 
 ````
@@ -79,7 +78,6 @@ spec:
 $ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/prod/service.yaml
 $ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/prod/deployment.yaml
 $ kubectl apply -f https://raw.githubusercontent.com/cyrilbkr/docker-testapp/master/kubernetes/prod/hpa.yaml
-
 ````
 
 
