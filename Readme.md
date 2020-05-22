@@ -26,20 +26,27 @@ Simple Node.js app for Canary deployment test
 
 ## Usage with Kubernetes
 
+### Quick simple setup
+
+````
+$ kubectl apply -f
+$ kubectl apply -f
+
+````
+
 ````
 apiVersion: v1
 kind: Service
 metadata:
   name: api
-  namespace: testapi
   labels:
-    run: api
+    app: api
 spec:
   ports:
   - port: 3000
     protocol: TCP
   selector:
-    run: api
+    app: api
 
 ---
 
@@ -47,16 +54,70 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api
-  namespace: testapi
 spec:
   selector:
     matchLabels:
-      run: api
-  replicas: 4
+      app: api
+  replicas: 1
   template:
     metadata:
       labels:
-        run: api
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: cyrilbkr/testapp
+        ports:
+        - containerPort: 3000
+
+
+````
+
+### Production like setup (w/ hpa/limits/rollingupdate)
+
+````
+$ kubectl apply -f 
+$ kubectl apply -f
+
+````
+
+
+
+````
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+  selector:
+    app: api
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  selector:
+    matchLabels:
+      app: api
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: api
     spec:
       containers:
       - name: api
@@ -68,10 +129,28 @@ spec:
           limits:
             memory: "2048Mi"
             cpu: "1.5"
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
         ports:
         - containerPort: 3000
 
 
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api
+spec:
+  maxReplicas: 10
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api
+  targetCPUUtilizationPercentage: 60
+
 ````
-
-
